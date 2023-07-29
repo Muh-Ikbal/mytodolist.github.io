@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Document</title>
+
+        <style>
+            * {
+                font-family: Arial, Helvetica, sans-serif;
+            }
+            body {
+                background-image: url(img/SL-043021-42650-28.jpg);
+                background-size: cover;
+            }
+            input[type="submit"],
+            button,
+            #tutup {
+                cursor: pointer;
+            }
+            .container {
+                width: 650px;
+                height: 450px;
+                margin: auto;
+                border: 3px solid tomato;
+                text-align: center;
+                background-image: url(img/SL_043021_42650_12.jpg);
+                background-size: cover;
+                overflow: auto;
+            }
+            header h1 {
+                margin: 20px auto;
+                width: 250px;
+                border: 2px solid white;
+                border-radius: 10%;
+                font-size: 24px;
+                text-align: center;
+                color: white;
+            }
+            .mytodo-list {
+                color: white;
+            }
+            #UpdateForm {
+                display: none;
+            }
+        </style>
+    </head>
+    <body>
+        <div class="container">
+            <header>
+                <h1>My Todo List</h1>
+            </header>
+
+            <main>
+                <section>
+                    <div class="mytodo-list">
+                        <form action="javascript:void(0)" id="CreateForm">
+                            <input
+                                type="text"
+                                id="add-task"
+                                placeholder="tugas baru"
+                            />
+                            <div>
+                                <input
+                                    type="submit"
+                                    value="create"
+                                    class="create"
+                                    onclick="createTask()"
+                                />
+                            </div>
+                        </form>
+                        <form action="javascript:void(0)" id="UpdateForm">
+                            <input
+                                type="text"
+                                id="update-task"
+                                placeholder="update"
+                            />
+                            <a onclick="tutup()" id="tutup">&#10006;</a>
+
+                            <div>
+                                <input type="submit" value="update" />
+                            </div>
+                        </form>
+
+                        <p id="counter"></p>
+
+                        <table>
+                            <tr>
+                                <th colspan="4">My Task</th>
+                            </tr>
+
+                            <tbody id="myTask"></tbody>
+                        </table>
+                    </div>
+                </section>
+            </main>
+        </div>
+
+        <script>
+            let myTodoList = [];
+            function createTask() {
+                let task = document.getElementById("add-task").value;
+                if (task == "") {
+                    alert("tolong masukkan tugas anda!!");
+                } else {
+                    myTodoList.push(task);
+                    document.getElementById("add-task").value = "";
+                    readTaskAll();
+                }
+            }
+            function readTaskAll() {
+                let data = "";
+                for (var i = 0; i < myTodoList.length; i++) {
+                    data += "<tr>";
+                    data += "<td>" + (i + 1) + "." + "</td>";
+                    data += "<td>" + myTodoList[i] + "</td>";
+                    data +=
+                        '<td><button class="update" onclick="updateTask(' +
+                        i +
+                        ')">Update</button>';
+                    data +=
+                        '<td><button class="delete" onclick="deleteTask(' +
+                        i +
+                        ')">Delete</button>';
+                    data += "</tr>";
+                }
+                document.getElementById("counter").innerHTML =
+                    myTodoList.length + " tugas";
+                document.getElementById("myTask").innerHTML = data;
+            }
+            readTaskAll();
+            function updateTask(item) {
+                document.getElementById("UpdateForm").style.display = "block";
+                document.getElementById("update-task").value = myTodoList[item];
+                document.getElementById("UpdateForm").onsubmit = function () {
+                    let task = document.getElementById("update-task").value;
+                    myTodoList.splice(item, 1, task.trim());
+
+                    readTaskAll();
+                    tutup();
+                };
+            }
+
+            function deleteTask(item) {
+                myTodoList.splice(item, 1);
+                readTaskAll();
+            }
+
+            function tutup() {
+                document.getElementById("UpdateForm").style.display = "none";
+            }
+        </script>
+    </body>
+</html>
